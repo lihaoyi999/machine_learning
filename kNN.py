@@ -69,6 +69,7 @@ def autoNorm(dataSet):
     归一化数据集
     :param
     dataSet: 数据集
+
     :return:
     normDataSet: 返回归一化后的数据集
     ranges: 每列的极差
@@ -122,8 +123,6 @@ def img2vector(filename):
     return returnVect
 
 # 手写数字识别
-
-
 def handwritingClassTest():
     hwLabels = []
     trainingFileList = os.listdir('trainingDigits')
