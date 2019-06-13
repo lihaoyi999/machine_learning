@@ -1,5 +1,6 @@
 import numpy as np
 import kNN
+import trees
 
 
 # group, labels = kNN.createDataSet()
@@ -21,4 +22,7 @@ import kNN
 #
 # kNN.datingClassTest()
 # kNN.classifyPerson()
-kNN.handwritingClassTest()
+# kNN.handwritingClassTest()
+
+myDat, labels = trees.createDataSet()
+trees.calcShannonEnt(myDat)
