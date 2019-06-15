@@ -25,4 +25,20 @@ import trees
 # kNN.handwritingClassTest()
 
 myDat, labels = trees.createDataSet()
-trees.calcShannonEnt(myDat)
+# trees.calcShannonEnt(myDat)
+# trees.splitDataSet(myDat, 0, 1)
+# trees.chooseBestFeatureToSplit(myDat)
+# trees.createTree(myDat, labels)
+
+# trees.createPlot()
+# myTree = trees.retrieveTree(0)
+# myTree['no surfacing'][3] = 'maybe'
+# trees.createPlot(myTree)
+# test_class = trees.classify(myTree, labels, [1, 1])
+# print(test_class)
+
+fr = open('lenses.txt')
+lenses = [inst.strip().split('\t') for inst in fr.readlines()]
+lensesLabels = ['age', 'prescript', 'astigmatic', 'tearRate']
+lensesTree = trees.createTree(lenses, lensesLabels)
+trees.createPlot(lensesTree)
