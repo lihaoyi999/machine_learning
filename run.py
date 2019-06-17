@@ -58,4 +58,6 @@ import bayes
 #
 # print(np.array(trainMat).sum(axis=0).sum())
 
-bayes.testingNB()
+# bayes.testingNB()
+bayes.spamTest()
+
