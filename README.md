@@ -27,9 +27,9 @@ $$H = -\sigma_{n-1}^{n}p(x_i)log_2p(x_i)$$，n是分类数目
 - 如果$p1(x,y)<p2(x,y)$，那么类别为2.
 
 $$p(c_j|W)=\frac{p(W|c_j)p(c_j)}{p(W)}$$  
-$p(c_j)$:类别$j$的文档数除以总文档数，$W$为词向量。  
+$p(c_j)$: 类别$j$的文档数除以总文档数，$W$为词向量。  
 根据朴素贝叶斯假设：
-$p(W|c_j)=p(w_0,w_1,w_2,\cdot,w_n|c_j)=p(w_0|c_j)p(w_1|c_j)p(w_2|c_j)\cdot p(w_m|c_j)$
+$p(W|c_j)=p(w_0,w_1,w_2,\cdots,w_n|c_j)=p(w_0|c_j)p(w_1|c_j)p(w_2|c_j)\cdots p(w_m|c_j)$
 
 伪代码：
 ```  
