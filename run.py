@@ -1,7 +1,7 @@
 import numpy as np
-import kNN
-import trees
-
+# import kNN
+# import trees
+import bayes
 
 # group, labels = kNN.createDataSet()
 # print(kNN.classify0([0, 0], group, labels, 3))
@@ -24,7 +24,7 @@ import trees
 # kNN.classifyPerson()
 # kNN.handwritingClassTest()
 
-myDat, labels = trees.createDataSet()
+# myDat, labels = trees.createDataSet()
 # trees.calcShannonEnt(myDat)
 # trees.splitDataSet(myDat, 0, 1)
 # trees.chooseBestFeatureToSplit(myDat)
@@ -36,9 +36,26 @@ myDat, labels = trees.createDataSet()
 # trees.createPlot(myTree)
 # test_class = trees.classify(myTree, labels, [1, 1])
 # print(test_class)
+#
+# fr = open('lenses.txt')
+# lenses = [inst.strip().split('\t') for inst in fr.readlines()]
+# lensesLabels = ['age', 'prescript', 'astigmatic', 'tearRate']
+# lensesTree = trees.createTree(lenses, lensesLabels)
+# trees.createPlot(lensesTree)
 
-fr = open('lenses.txt')
-lenses = [inst.strip().split('\t') for inst in fr.readlines()]
-lensesLabels = ['age', 'prescript', 'astigmatic', 'tearRate']
-lensesTree = trees.createTree(lenses, lensesLabels)
-trees.createPlot(lensesTree)
+
+# listOPosts, listClasses = bayes.loadDataSet()
+# myVocavList = bayes.createVocabList(listOPosts)
+# trainMat = []
+# for postinDoc in listOPosts:
+#     trainMat.append(bayes.setOfWords2Vec(myVocavList, postinDoc))
+# # print(trainMat)
+# p0V, p1V, pAb = bayes.trainNB0(trainMat, listClasses)
+#
+# # print(pAb)
+# # print(p0V)
+# # print(p1V)
+#
+# print(np.array(trainMat).sum(axis=0).sum())
+
+bayes.testingNB()
