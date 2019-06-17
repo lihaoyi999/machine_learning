@@ -1,8 +1,6 @@
 # 机器学习实战笔记
 
 
-<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
-
 ## 第一部分 分类
 ### 第1章 机器学习基础
 ### 第2章 k-近邻算法
@@ -13,10 +11,10 @@
 缺点：可能会产生过度匹配问题
 
 #### 3.1.1 信息增益
-熵，定义为信息的期望值。如果待分类的事务可能划分在多个类中，则符号(\\x_i\\)的信息定义为：  
+熵，定义为信息的期望值。如果待分类的事务可能划分在多个类中，则符号$$x_i$$的信息定义为：  
 $$l(x_i)=-log_2p(x_i)$$  
-其中p(x_i)是选择该分类的概率。  
-H = -sigma_{n-1}^{n}p(x_i)log_2p(x_i)，n是分类数目
+其中$p(x_i)$是选择该分类的概率。  
+$$H = -sigma_{n-1}^{n}p(x_i)log_2p(x_i)$$，n是分类数目
 
 ### 第4章 朴素贝叶斯算法
 ### 第5章 Logistic回归
