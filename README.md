@@ -49,12 +49,13 @@ $p(W|c_j)=p(w_0,w_1,w_2,\cdots,w_n|c_j)=p(w_0|c_j)p(w_1|c_j)p(w_2|c_j)\cdots p(w
 优点：计算代价不高，易于理解和实现
 缺点：容易欠拟合，分类精度可能不高  
 %Sigmoid%函数：$$\row(z)=\frac{1}{1+e_{_z}}$$
-$$z=W^{T}X=w_0x_0+w_1x_1,\cdots,w_nx_n$$
+$$z=W^{T}X=w_0x_0+w_1x_1+\cdots+w_nx_n$$
 **梯度上升算法**  
 梯度上升算法基于的思想是：要找到函数的最大值，最好的方法是沿着该函数的梯度方向探寻。
 如果梯度记为$\Delta$，则函数$f(x,y)$的梯度由下式表示：  
 $$
-\Delta f(x,y)=\begin{pmatrix}
+\Delta f(x,y)=
+\begin{pmatrix}
 \frac{\partial f(x,y)}{\partial x}\\
 \frac{\partial f(x,y)}{\partial y}
 \end{pmatrix}
