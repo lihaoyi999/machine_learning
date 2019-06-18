@@ -1,8 +1,9 @@
 import numpy as np
 # import kNN
 # import trees
-import bayes
-
+# import bayes
+# import feedparser
+import logRegres
 # group, labels = kNN.createDataSet()
 # print(kNN.classify0([0, 0], group, labels, 3))
 #
@@ -59,5 +60,16 @@ import bayes
 # print(np.array(trainMat).sum(axis=0).sum())
 
 # bayes.testingNB()
-bayes.spamTest()
+# bayes.spamTest()
+# ny = feedparser.parse('https://newyork.craigslist.org/search/res?format=rss')
+# sf = feedparser.parse('https://sfbay.craigslist.org/search/apa?format=rss')
+# # vocabList, pSF, PNY = bayes.localWords(ny, sf)
+# bayes.getTopWords(ny, sf)
+
+dataArr, labelMat = logRegres.loadDataSet()
+# weights = logRegres.gradAscent(dataArr, labelMat)
+# logRegres.plotBestFit(weights.getA())
+weights = logRegres.stocGradAscent0(dataArr, labelMat)
+print(weights)
+logRegres.plotBestFit(weights)
 
