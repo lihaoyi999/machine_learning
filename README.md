@@ -124,9 +124,8 @@ TypeError: 'numpy.float64' object cannot be interpreted as an integer
 缺点：对参数调节和核函数的选择敏感，原始分类器不加修改仅适用于处理二分类问题
 
  分隔超平面可写为：$W^TX+b$  
- 点到分隔超平面的距离：$|W^TA+b|/|W|$
- $$arg \max_{{w},b}\left \{ \min_{{n}}(label\cdot(W^Tx+b))\cdot\frac{1}{\left |W| \right \} \right \}$$
- $$arg \, \max_{{W},b} \left \{ \min_{{n}}(label \cdot (W^Tx+b)) \cdot \frac{1}{||W||} \right \}$$
+ 点到分隔超平面的距离：$|W^TA+b|/|W|$  
+ 目标函数：
  $$\max_{{\alpha}}\left [ \sum_{i=1}^{m}\alpha-\frac{1}{2}\sum_{i,j=1}^{m}label^{(i)}\cdot label^{(j)}\cdot \alpha_i \cdot \alpha_j \left \langle x^{(i)},x^{(j)} \right \rangle\right ]$$
 
 ### 第7章 
