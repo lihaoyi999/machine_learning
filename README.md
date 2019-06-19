@@ -56,7 +56,7 @@ $$z=W^{T}X=w_0x_0+w_1x_1+\cdots+w_nx_n$$
 $$
 \Delta f(x,y)=
 \begin{pmatrix}
-\frac{\partial f(x,y)}{\partial x}\\
+\frac{\partial f(x,y)}{\partial x}\\\\
 \frac{\partial f(x,y)}{\partial y}
 \end{pmatrix}
 $$
@@ -71,8 +71,8 @@ $X$为m行n列的矩阵，表示m个样本，n个特征。$Y$为这m个样本的
 $$
 X=
 \begin{pmatrix}
-x_{11} & \cdots & x_{1n}\\
-\vdots & \ddots & \vdots\\
+x_{11} & \cdots & x_{1n}\\\\
+\vdots & \ddots & \vdots\\\\
 x_{m1} & \cdots & x_{mn}
 \end{pmatrix}
 $$
