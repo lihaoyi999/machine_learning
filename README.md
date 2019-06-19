@@ -71,11 +71,20 @@ $X$为m行n列的矩阵，表示m个样本，n个特征。$Y$为这m个样本的
 $$
 X=
 \begin{pmatrix}
-a_{11} & \cdots & a_{1n}\\
+x_{11} & \cdots & x_{1n}\\
 \vdots & \ddots & \vdots\\
-a_{m1} & \cdots & a_{mn}
+x_{m1} & \cdots & x_{mn}
 \end{pmatrix}
 $$
+
+$$
+\begin{pmatrix}
+x_{11} & \cdots & x_{1n}\\
+\vdots & \ddots & \vdots\\
+x_{m1} & \cdots & x_{mn}
+\end{pmatrix}
+$$
+
 $$Y=
 \begin{pmatrix}
 y_1\\ 
