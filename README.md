@@ -65,6 +65,34 @@ $$
 梯度算法的迭代公式：
 $$w:=w + \alpha\Delta_wf(w)$$
 $\alpha$为步长。  
+
+
+$X$为m行n列的矩阵，表示m个样本，n个特征。$Y$为这m个样本的分列标签。
+$$
+X=
+\begin{pmatrix}
+a_{11} & \cdots & a_{1n}\\
+\vdots & \ddots & \vdots\\
+a_{m1} & \cdots & a_{mn}
+\end{pmatrix}
+$$
+$$Y=
+\begin{pmatrix}
+y_1\\ 
+\cdots\\ 
+y_m
+\end{pmatrix}
+$$
+logistic模型：  
+$$Z=W^TX=w_0x_0+w_1x_1+\cdots+w_nx_n$$
+预测模型：  
+$$\bar{Y}=\rho(Z)=\frac{1}{1+e^{-Z}}$$
+预测误差：  
+$$E=Y-bar{Y}$$
+
+梯度：
+$$w:=w + \alphaX^TE$$
+ 
 **梯度上升算法伪代码：**
 ```
 每个回归系数初始化为1

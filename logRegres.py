@@ -25,7 +25,7 @@ def sigmoid(inX):
     :param inX:
     :return:
     """
-    return 1.0/(1 + np.exp(-inX))
+    return 1.0 / (1 + np.exp(-inX))
 
 
 # @pysnooper.snoop()
@@ -36,16 +36,16 @@ def gradAscent(dataMatIn, classLabels):
     :param classLabels:类别标签，1*100的行向量
     :return:
     """
-    dataMatrix = np.mat(dataMatIn)
-    labelMat = np.mat(classLabels).transpose() # 行向量转为列向量
-    m, n = np.shape(dataMatrix) # dataMatrix的行列，m行n列
-    alpha = 0.001 # 步长
-    maxCycles = 500 # 迭代次数
-    weights = np.ones((n, 1)) # 变量的系数初始化为1，
+    dataMatrix = np.mat(dataMatIn)  # m行n列的矩阵
+    labelMat = np.mat(classLabels).transpose()  # 行向量转为列向量，长度为n
+    m, n = np.shape(dataMatrix)  # dataMatrix的行列，m行n列
+    alpha = 0.001  # 步长
+    maxCycles = 500  # 迭代次数
+    weights = np.ones((n, 1))  # 变量的系数初始化为1，长度为1
     for k in range(maxCycles):
-        h = sigmoid(dataMatrix*weights) # h是一个长度为n列向量
-        error = (labelMat - h)
-        weights = weights + alpha*dataMatrix.transpose()*error
+        h = sigmoid(dataMatrix * weights)  # h是一个长度为n列向量
+        error = (labelMat - h)  # 是一组常数向量，长度为n
+        weights = weights + alpha * dataMatrix.transpose() * error
     return weights
 
 
@@ -67,20 +67,21 @@ def stocGradAscent0(dataMatrix, classLabels):
         weights = weights + alpha * error * dataMatrix[i]
     return weights
 
+
 def plotBestFit(weights):
     import matplotlib.pyplot as plt
     # weights = weights.getA()
-    dataMat, labelMat=loadDataSet()
-    dataArr =  np.array(dataMat)
+    dataMat, labelMat = loadDataSet()
+    dataArr = np.array(dataMat)
     n = np.shape(dataArr)[0]
     xcord1 = []
     xcord2 = []
     ycord1 = []
     ycord2 = []
     for i in range(n):
-        if int(labelMat[i])==1:
-            xcord1.append(dataArr[i,1])
-            ycord1.append(dataArr[i,2])
+        if int(labelMat[i]) == 1:
+            xcord1.append(dataArr[i, 1])
+            ycord1.append(dataArr[i, 2])
         else:
             xcord2.append(dataArr[i, 1])
             ycord2.append(dataArr[i, 2])
@@ -89,8 +90,8 @@ def plotBestFit(weights):
     ax.scatter(xcord1, ycord1, s=30, c='red', marker='s')
     ax.scatter(xcord2, ycord2, s=30, c='green')
     x = np.arange(-3, 3, 0.1)
-    y = (-weights[0] - weights[1]*x)/weights[2]
-    ax.plot(x,y)
+    y = (-weights[0] - weights[1] * x) / weights[2]
+    ax.plot(x, y)
     plt.xlabel('X1')
     plt.ylabel('X1')
     plt.show()
