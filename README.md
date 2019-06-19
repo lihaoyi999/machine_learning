@@ -77,14 +77,6 @@ x_{m1} & \cdots & x_{mn}
 \end{pmatrix}
 $$
 
-$$
-\begin{pmatrix}
-x_{11} & \cdots & x_{1n}\\
-\vdots & \ddots & \vdots\\
-x_{m1} & \cdots & x_{mn}
-\end{pmatrix}
-$$
-
 $$Y=
 \begin{pmatrix}
 y_1\\ 
