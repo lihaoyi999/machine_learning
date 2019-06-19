@@ -88,10 +88,10 @@ $$Z=W^TX=w_0x_0+w_1x_1+\cdots+w_nx_n$$
 预测模型：  
 $$\bar{Y}=\rho(Z)=\frac{1}{1+e^{-Z}}$$
 预测误差：  
-$$E=Y-bar{Y}$$
+$$E=Y-\bar{Y}$$
 
 梯度：
-$$w:=w + \alphaX^TE$$
+$$w:=w + \alpha X^{T} E$$
  
 **梯度上升算法伪代码：**
 ```
