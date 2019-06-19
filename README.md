@@ -128,3 +128,4 @@ TypeError: 'numpy.float64' object cannot be interpreted as an integer
  $$arg \max_{{w},b}\left \{ \min_{{n}}(label\cdot(W^Tx+b))\cdot\frac{1}{\left \| W \right \|} \right \}$$
  $$\max_{{\alpha}}\left [ \sum_{i=1}^{m}\alpha-\frac{1}{2}\sum_{i,j=1}^{m}label^{(i)}\cdot label^{(j)}\cdot \alpha_i \cdot \alpha_j \left \langle x^{(i)},x^{(j)} \right \rangle\right ]$$
 
+### 第7章 
