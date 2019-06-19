@@ -25,7 +25,10 @@ def sigmoid(inX):
     :param inX:
     :return:
     """
-    return 1.0 / (1 + np.exp(-inX))
+    if inX >= 0:
+        return 1.0 / (1.0 + np.exp(-inX))
+    else:
+        return np.exp(inX) / (1.0 + np.exp(inX))
 
 
 # @pysnooper.snoop()
@@ -52,19 +55,45 @@ def gradAscent(dataMatIn, classLabels):
 # @pysnooper.snoop()
 def stocGradAscent0(dataMatrix, classLabels):
     """
-    随机梯度上升
+    随机梯度上升算法
     :param dataMatrix:
     :param classLabels:
     :return:
     """
     dataMatrix = np.array(dataMatrix)
-    m, n = np.shape(dataMatrix)
+    m, n = np.shape(dataMatrix)# m为样本数目，n为特征数目
     alpha = 0.01
-    weights = np.ones(n)
+    weights = np.ones(n) # 特征系数初始化为1
+    # 对样本进行遍历
     for i in range(m):
         h = sigmoid(sum(dataMatrix[i] * weights))
         error = classLabels[i] - h
         weights = weights + alpha * error * dataMatrix[i]
+    return weights
+
+
+# 改进的随机梯度上升算法
+def stocGradAscent1(dataMatrix, classLabels, numIter=150):
+    """
+    随机梯度上升算法
+    :param dataMatrix: 样本矩阵
+    :param classLabels: 样本分类标签向量
+    :param numIter: 迭代次数
+    :return:
+    """
+    dataMatrix = np.array(dataMatrix)
+    m, n = np.shape(dataMatrix)# m为样本数目，n为特征数目
+    weights = np.ones(n) # 特征系数初始化为1
+    for j in range(numIter):
+        dataIndex = list(range(m))
+        # 对样本进行遍历
+        for i in range(m):
+            alpha = 4/(1.0 + j + i) + 0.01 # alpha在每次迭代时都作出调整，随着迭代次数增加而减小
+            randIdex = int(np.random.uniform(0, len(dataIndex))) # 随机选取样本来更新系数
+            h = sigmoid(sum(dataMatrix[randIdex] * weights))
+            error = classLabels[randIdex] - h
+            weights = weights + alpha * error * dataMatrix[randIdex]
+            del(dataIndex[randIdex])
     return weights
 
 
@@ -95,3 +124,49 @@ def plotBestFit(weights):
     plt.xlabel('X1')
     plt.ylabel('X1')
     plt.show()
+
+
+# 示例：从疝气病症预测病马的死亡率
+def classifyVector(inX, weights):
+    prob = sigmoid(sum(inX*weights))
+    if prob > 0.5:
+        return  1.0
+    else:
+        return 0.0
+
+
+def colicTest():
+    frTrain = open('horseColicTraining.txt')
+    frTest = open('horseColicTest.txt')
+    trainingSet = []
+    trainingLabels = []
+    for line in frTrain.readlines():
+        currLine = line.strip().split('\t')
+        lineArr = []
+        for i in range(21):
+            lineArr.append(float(currLine[i]))
+        trainingSet.append(lineArr)
+        trainingLabels.append(float(currLine[21]))
+    trainingWeightd = stocGradAscent1(np.array(trainingSet), trainingLabels, 500)
+    errorCount = 0.0
+    numTestVec = 0.0
+    for line in frTest.readlines():
+        numTestVec += 1.0
+        currLine = line.strip().split('\t')
+        lineArr = []
+        for i in range(21):
+            lineArr.append(float(currLine[i]))
+        if int(classifyVector(np.array(lineArr), trainingWeightd)) !=int(currLine[21]):
+            errorCount += 1
+    errorRate = (float(errorCount) / numTestVec)
+    print("the error rate of this test is: %f" % errorRate)
+    return errorRate
+
+
+def multiTest():
+    numTests = 10
+    errorSum = 0.0
+    for k in range(numTests):
+        errorSum += colicTest()
+    print("after %d iterations the avergage error rate is: %f" %(numTests, errorSum/float(numTests)))
+

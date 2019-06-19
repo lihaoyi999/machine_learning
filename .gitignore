@@ -3,5 +3,6 @@
 .idea
 *.xml
 /email/
+test.py
 
 

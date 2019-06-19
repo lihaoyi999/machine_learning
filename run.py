@@ -66,10 +66,14 @@ import logRegres
 # # vocabList, pSF, PNY = bayes.localWords(ny, sf)
 # bayes.getTopWords(ny, sf)
 
-dataArr, labelMat = logRegres.loadDataSet()
+# dataArr, labelMat = logRegres.loadDataSet()
 # weights = logRegres.gradAscent(dataArr, labelMat)
 # logRegres.plotBestFit(weights.getA())
-weights = logRegres.stocGradAscent0(dataArr, labelMat)
-print(weights)
-logRegres.plotBestFit(weights)
+# weights = logRegres.stocGradAscent0(dataArr, labelMat)
+# print(weights)
+# logRegres.plotBestFit(weights)
+# weights = logRegres.stocGradAscent1(dataArr, labelMat)
+# print(weights)
+# logRegres.plotBestFit(weights)
 
+# logRegres.multiTest()

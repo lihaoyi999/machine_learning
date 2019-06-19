@@ -56,7 +56,7 @@ $$z=W^{T}X=w_0x_0+w_1x_1+\cdots+w_nx_n$$
 $$
 \Delta f(x,y)=
 \begin{pmatrix}
-\frac{\partial f(x,y)}{\partial x}\\
+\frac{\partial f(x,y)}{\partial x}\\\\
 \frac{\partial f(x,y)}{\partial y}
 \end{pmatrix}
 $$
@@ -67,19 +67,19 @@ $$w:=w + \alpha\Delta_wf(w)$$
 $\alpha$为步长。  
 
 
-$X$为m行n列的矩阵，表示m个样本，n个特征。$Y$为这m个样本的分列标签。
+$X$为m行n列的矩阵，表示m个样本，n个特征。$Y$为这m个样本的分类标签。
 $$
 X=
 \begin{pmatrix}
-a_{11} & \cdots & a_{1n}\\
-\vdots & \ddots & \vdots\\
+a_{11} & \cdots & a_{1n}\\\\
+\vdots & \ddots & \vdots\\\\
 a_{m1} & \cdots & a_{mn}
 \end{pmatrix}
 $$
 $$Y=
 \begin{pmatrix}
-y_1\\ 
-\cdots\\ 
+y_1\\\\ 
+\vdots\\\\ 
 y_m
 \end{pmatrix}
 $$
@@ -88,10 +88,12 @@ $$Z=W^TX=w_0x_0+w_1x_1+\cdots+w_nx_n$$
 预测模型：  
 $$\bar{Y}=\rho(Z)=\frac{1}{1+e^{-Z}}$$
 预测误差：  
-$$E=Y-bar{Y}$$
+$$E=Y-\bar{Y}$$
 
 梯度：
-$$w:=w + \alphaX^TE$$
+$$w:=w + \alpha X^{T} E$$
+#### 梯度上升算法
+每次更新回归系数是都需要遍历整个数据集 
  
 **梯度上升算法伪代码：**
 ```
@@ -102,6 +104,9 @@ $$w:=w + \alphaX^TE$$
 返回回归系数
 ```
 
+#### 随机梯度上升算法
+一次仅用一个样本点更新回归系数，可以在新样本到来时对分类器进行增量式更新，
+因而随机梯度上升算法是一个在线学习算法
 **随机梯度上升算法伪代码：**
 ```
 每个回归系数初始化为1
@@ -114,5 +119,12 @@ stocGradAscent0运行错误：
 TypeError: 'numpy.float64' object cannot be interpreted as an integer  
 修改：增加一行dataMatrix=np.array(dataMatrix)  
 
+### 第6章 支持向量机
+优点：泛化错误率低，计算开销不大，结果易于解释  
+缺点：对参数调节和核函数的选择敏感，原始分类器不加修改仅适用于处理二分类问题
 
+ 分隔超平面可写为：$W^TX+b$  
+ 点到分隔超平面的距离：$|W^TA+b|/|W|$
+ $$arg \max_{{w},b}\left \{ \min_{{n}}(label\cdot(W^Tx+b))\cdot\frac{1}{\left \| W \right \|} \right \}$$
+ $$\max_{{\alpha}}\left [ \sum_{i=1}^{m}\alpha-\frac{1}{2}\sum_{i,j=1}^{m}label^{(i)}\cdot label^{(j)}\cdot \alpha_i \cdot \alpha_j \left \langle x^{(i)},x^{(j)} \right \rangle\right ]$$
 
