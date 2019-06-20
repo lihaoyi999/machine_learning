@@ -129,4 +129,4 @@ TypeError: 'numpy.float64' object cannot be interpreted as an integer
 $$\max_{{\alpha}}\left [ \sum_{i=1}^{m}\alpha-\frac{1}{2}\sum_{i,j=1}^{m}label^{(i)}\cdot label^{(j)}\cdot \alpha_i \cdot \alpha_j \left \langle x^{(i)},x^{(j)} \right \rangle\right ]$$
 目标函数的约束条件：
 $$C\geqslant \alpha \geqslant 0,和\sum_{i-1}^{m}\alpha_i \cdot label^{(i)}=0$$
-### 第7章 
+### 第7章 随机森林
