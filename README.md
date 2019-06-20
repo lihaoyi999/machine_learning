@@ -123,9 +123,10 @@ TypeError: 'numpy.float64' object cannot be interpreted as an integer
 优点：泛化错误率低，计算开销不大，结果易于解释  
 缺点：对参数调节和核函数的选择敏感，原始分类器不加修改仅适用于处理二分类问题
 
- 分隔超平面可写为：$W^TX+b$  
- 点到分隔超平面的距离：$|W^TA+b|/|W|$
- $$arg \max_{{w},b}\left \{ \min_{{n}}(label\cdot(W^Tx+b))\cdot\frac{1}{\left |W| \right \} \right \}$$
- $$\max_{{\alpha}}\left [ \sum_{i=1}^{m}\alpha-\frac{1}{2}\sum_{i,j=1}^{m}label^{(i)}\cdot label^{(j)}\cdot \alpha_i \cdot \alpha_j \left \langle x^{(i)},x^{(j)} \right \rangle\right ]$$
-
+分隔超平面可写为：$W^TX+b$  
+点到分隔超平面的距离：$|W^TA+b|/|W|$  
+目标函数：
+$$\max_{{\alpha}}\left [ \sum_{i=1}^{m}\alpha-\frac{1}{2}\sum_{i,j=1}^{m}label^{(i)}\cdot label^{(j)}\cdot \alpha_i \cdot \alpha_j \left \langle x^{(i)},x^{(j)} \right \rangle\right ]$$
+目标函数的约束条件：
+$$C\geqslant \alpha \geqslant 0,和\sum_{i-1}^{m}\alpha_i \cdot label^{(i)}=0$$
 ### 第7章 

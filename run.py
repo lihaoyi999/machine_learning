@@ -3,7 +3,10 @@ import numpy as np
 # import trees
 # import bayes
 # import feedparser
-import logRegres
+# import logRegres
+import svmMLiA
+
+
 # group, labels = kNN.createDataSet()
 # print(kNN.classify0([0, 0], group, labels, 3))
 #
@@ -77,3 +80,14 @@ import logRegres
 # logRegres.plotBestFit(weights)
 
 # logRegres.multiTest()
+
+# svmMLiA.selectJrand(5, 10)
+# svmMLiA.clipAlpha(aj=3, H=1, L=-1)
+# svmMLiA.clipAlpha(aj=-3, H=1, L=-1)
+dataArr, labelArr = svmMLiA.loadDataSet('./machinelearninginaction/CH06/testSet.txt')
+print(labelArr)
+
+
+b, alphas = svmMLiA.smoSimple(dataArr, labelArr, 0.6, 0.001, 40)
+print(b)
+print(alphas[alphas > 0])

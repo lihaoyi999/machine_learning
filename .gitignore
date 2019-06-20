@@ -1,8 +1,11 @@
 /venv/
 *.pdf
-.idea
+
+.idea/
+
 *.xml
+
 /email/
-test.py
 
 
+/machinelearninginaction/
