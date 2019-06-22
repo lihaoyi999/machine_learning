@@ -41,7 +41,7 @@ def selectJrand(i, m):
 # @pysnooper.snoop()
 def clipAlpha(aj, H, L):
     """
-
+    aj大于0时，调整为C；aj小于L时调整为L
     :param aj:
     :param H:
     :param L:
@@ -49,28 +49,37 @@ def clipAlpha(aj, H, L):
     """
     if aj > H:
         aj = H
-    if L > aj:
+    if aj < L:
         aj = L
     return aj
 
 
 def smoSimple(dataMatIn, classLabels, C, toler, maxIter):
-    dataMatrix = np.mat(dataMatIn)
-    labelMat = np.mat(classLabels).transpose()
-    b = 0
-    m, n = np.shape(dataMatrix)
-    alphas = np.mat(np.zeros((m, 1)))
-    iter = 0
+    """
+
+    :param dataMatIn:  数据集
+    :param classLabels: 类别标签
+    :param C: 常数，松弛变量
+    :param toler: 容错率
+    :param maxIter: 取消前最大循环次数
+    :return:
+    """
+    dataMatrix = np.mat(dataMatIn) # 将数据集转成numpy的矩阵
+    labelMat = np.mat(classLabels).transpose() # 将类别标签转为numpy矩阵，并转置成列向量
+    b = 0 # 偏置初始化为0
+    m, n = np.shape(dataMatrix)  # 数据集的行与列
+    alphas = np.mat(np.zeros((m, 1)))  # alpha列矩阵初始化为0
+    iter = 0  # 循环次数初始化为0
     while(iter < maxIter):
-        alphaPairsChanged = 0
+        alphaPairsChanged = 0  # 初始化为0，用来记录alpha是否已经进行优化
         for i in range(m):
-            fXi = float(np.multiply(alphas, labelMat).T * (dataMatrix * dataMatrix[i, :].T)) + b
-            Ei = fXi - float(labelMat[i])
-            if ((labelMat[i] * Ei < -toler) and (alphas[i] < C)) or \
-                    ((labelMat[i] * Ei > toler) and (alphas[i] > 0)):
-                j = selectJrand(i, m)
-                fXj = float(np.multiply(alphas, labelMat).T * (dataMatrix * dataMatrix[j, :].T)) + b
-                Ej = fXj - float(labelMat[j])
+            fXi = float(np.multiply(alphas, labelMat).T * (dataMatrix * dataMatrix[i, :].T)) + b  # 第i个样本的预测类别
+            Ei = fXi - float(labelMat[i])  # 预测误差
+            #  如果
+            if ((labelMat[i] * Ei < -toler) and (alphas[i] < C)) or ((labelMat[i] * Ei > toler) and (alphas[i] > 0)):
+                j = selectJrand(i, m)  # 随机选取另一个alpha值，alpha[j]
+                fXj = float(np.multiply(alphas, labelMat).T * (dataMatrix * dataMatrix[j, :].T)) + b  # 预测类别
+                Ej = fXj - float(labelMat[j])  # 预测误差
                 alphaIold = alphas[i].copy()
                 alphaJold = alphas[j].copy()
                 if (labelMat[i] != labelMat[j]):
