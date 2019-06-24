@@ -73,42 +73,57 @@ def smoSimple(dataMatIn, classLabels, C, toler, maxIter):
     while(iter < maxIter):
         alphaPairsChanged = 0  # 初始化为0，用来记录alpha是否已经进行优化
         for i in range(m):
-            fXi = float(np.multiply(alphas, labelMat).T * (dataMatrix * dataMatrix[i, :].T)) + b  # 第i个样本的预测类别
-            Ei = fXi - float(labelMat[i])  # 预测误差
+            fXi = float(np.multiply(alphas, labelMat).T *
+                        (dataMatrix * dataMatrix[i, :].T)) + b  # 第i个样本的预测类别
+            Ei = fXi - float(labelMat[i])  # 第i个样本预测误差
             #  如果
-            if ((labelMat[i] * Ei < -toler) and (alphas[i] < C)) or ((labelMat[i] * Ei > toler) and (alphas[i] > 0)):
-                j = selectJrand(i, m)  # 随机选取另一个alpha值，alpha[j]
-                fXj = float(np.multiply(alphas, labelMat).T * (dataMatrix * dataMatrix[j, :].T)) + b  # 预测类别
-                Ej = fXj - float(labelMat[j])  # 预测误差
+            if ((labelMat[i] * Ei < -toler) and (alphas[i] < C)) or \
+                    ((labelMat[i] * Ei > toler) and (alphas[i] > 0)):
+                j = selectJrand(i, m)  # 随机选取另一个alpha，alpha[j]
+                fXj = float(np.multiply(alphas, labelMat).T *
+                            (dataMatrix * dataMatrix[j, :].T)) + b  # 第j个样本的预测类别
+                Ej = fXj - float(labelMat[j])  # 第j个样本预测误差
                 alphaIold = alphas[i].copy()
                 alphaJold = alphas[j].copy()
+
+                # 将alpha[j]调整到0和C之间
                 if (labelMat[i] != labelMat[j]):
                     L = max(0, alphas[j] - alphas[i])
                     H = min(C, C + alphas[j] - alphas[i])
                 else:
                     L = max(0, alphas[j] + alphas[i] - C)
                     H = min(0, alphas[j] + alphas[i])
+
+                # 如果L等于H，就不做任何改变，直接执行continue语句
                 if L == H:
                     print('L==H')
                     continue
+
+                #  eta是alpha[j]的最优修改量
                 eta = 2.0 * dataMatrix[i, :] * dataMatrix[j, :].T - \
                     dataMatrix[i, :] * dataMatrix[i, :].T - \
                     dataMatrix[j, :] * dataMatrix[j, :].T
                 if eta > 0:
                     print('eta>=0')
                     continue
+                # 计算新的alpha[j]
                 alphas[j] -= labelMat[j] * (Ei - Ej) / eta
                 alphas[j] = clipAlpha(alphas[j], H, L)
+
+                # 如果alpha[j]变化很小，就跳出循环
                 if (abs(alphas[j] - alphaJold) < 0.00001):
                     print('j not moving enough')
                     continue
+                # alpha[i]向相反方向改变同样的大小
                 alphas[i] += labelMat[j] * labelMat[i] * (alphaJold - alphas[j])
-                b1 = b - Ei - labelMat[i] * (alphas[i] - alphaIold) * dataMatrix[i] * \
-                    dataMatrix[i, :].T - labelMat[j] * (alphas[j] - alphaJold) * \
-                    dataMatrix[i, :] * dataMatrix[j, :].T
-                b2 = b - Ej - labelMat[i] * (alphas[i] - alphaIold) * dataMatrix[i] * \
-                     dataMatrix[j, :].T - labelMat[j] * (alphas[j] - alphaJold) * \
-                     dataMatrix[j, :] * dataMatrix[j, :].T
+                # alpha[i]对应的b值
+                b1 = b - Ei - \
+                     labelMat[i] * (alphas[i] - alphaIold) * dataMatrix[i] * dataMatrix[i, :].T - \
+                     labelMat[j] * (alphas[j] - alphaJold) * dataMatrix[i, :] * dataMatrix[j, :].T
+                # alpha[j]对应的b值
+                b2 = b - Ej - \
+                     labelMat[i] * (alphas[i] - alphaIold) * dataMatrix[i] * dataMatrix[j, :].T - \
+                     labelMat[j] * (alphas[j] - alphaJold) * dataMatrix[j, :] * dataMatrix[j, :].T
                 if (0 < alphas[i] and (C > alphas[i])):
                     b = b1
                 elif (0 < alphas[j] and (C > alphas[j])):
