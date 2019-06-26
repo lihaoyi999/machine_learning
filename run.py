@@ -84,11 +84,12 @@ import svmMLiA
 # svmMLiA.selectJrand(5, 10)
 # svmMLiA.clipAlpha(aj=3, H=1, L=-1)
 # svmMLiA.clipAlpha(aj=-3, H=1, L=-1)
-dataArr, labelArr = svmMLiA.loadDataSet('D:/Downloads/machinelearninginaction/CH06/testSet.txt')
-print(labelArr)
+dataArr, labelArr = svmMLiA.loadDataSet('./machinelearninginaction/CH06/testSet.txt')
+# print(labelArr)
 
 
-b, alphas = svmMLiA.smoSimple(dataArr, labelArr, 0.6, 0.001, 40)
+# b, alphas = svmMLiA.smoSimple(dataArr, labelArr, 0.6, 0.001, 40)
+b, alphas = svmMLiA.smoP(dataArr, labelArr, 0.6, 0.001, 40)
 # for i in range(100):
 #     if alphas[i] > 0.0:
 #         print(dataArr[i], labelArr[i])
