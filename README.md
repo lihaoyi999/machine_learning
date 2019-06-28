@@ -6,6 +6,7 @@
 ### 第2章 k-近邻算法
 优点：精度高，对异常值不敏感，无数据输入假定  
 缺点：计算复杂度高，空间复杂度高
+
 ### 第3章 决策树
 优点：计算复杂度不高，输出结果易于理解，对中间值的缺失不敏感，可以处理不相关特征数据  
 缺点：可能会产生过度匹配问题
@@ -94,7 +95,7 @@ $$E=Y-\bar{Y}$$
 $$w:=w + \alpha X^{T} E$$
 #### 梯度上升算法
 每次更新回归系数是都需要遍历整个数据集 
- 
+
 **梯度上升算法伪代码：**
 ```
 每个回归系数初始化为1
@@ -124,11 +125,15 @@ TypeError: 'numpy.float64' object cannot be interpreted as an integer
 缺点：对参数调节和核函数的选择敏感，原始分类器不加修改仅适用于处理二分类问题
 
 分隔超平面可写为：$W^TX+b$  
-点到分隔超平面的距离：$|W^TA+b|/|W|$  
+点A到分隔超平面的距离：$\frac{|W^TA+b|}{|W|}$  
 目标函数：
-$$\max_{{\alpha}}\left [ \sum_{i=1}^{m}\alpha_i - \frac{1}{2}\sum_{i,j=1}^{m}label^{(i)}\cdot label^{(j)}\cdot \alpha_i \cdot \alpha_j \left \langle x^{(i)},x^{(j)} \right \rangle\right ]$$
+$$\max \limits_{\mathbf{\alpha}}\left [ \sum_{i=1}^{m}\alpha_i - \frac{1}{2}\sum_{i,j=1}^{m}label^{(i)}\cdot label^{(j)}\cdot \alpha_i \cdot \alpha_j \left \langle x^{(i)},x^{(j)} \right \rangle\right ]$$
 目标函数的约束条件：
-$$C\geqslant \alpha \geqslant 0, $$
+$$C\geqslant \alpha \geqslant 0$$
 和
 $$ \sum_{i-1}^{m}\alpha_i \cdot label^{(i)}=0$$
+
+
+
 ### 第7章 随机森林 
+
