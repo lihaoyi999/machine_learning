@@ -41,7 +41,7 @@ def selectJrand(i, m):
 # @pysnooper.snoop()
 def clipAlpha(aj, H, L):
     """
-    aj大于0时，调整为C；aj小于L时调整为L
+    aj大于H时，调整为H；aj小于L时调整为L
     :param aj:
     :param H:
     :param L:
@@ -67,14 +67,22 @@ def smoSimple(dataMatIn, classLabels, C, toler, maxIter):
     dataMatrix = np.mat(dataMatIn)  # 将数据集转成numpy的矩阵
     labelMat = np.mat(classLabels).transpose()  # 将类别标签转为numpy矩阵，并转置成列向量
     b = 0  # 偏置初始化为0
-    m, n = np.shape(dataMatrix)  # 数据集的行与列
-    alphas = np.mat(np.zeros((m, 1)))  # alpha列矩阵初始化为0
+    m, n = np.shape(dataMatrix)  # 数据集的行与列，m为样本数目，n为特征数目
+    alphas = np.mat(np.zeros((m, 1)))  # alpha列矩阵初始化为0,alpha是拉格朗日乘子向量，长度与样本量相等
     iter = 0  # 循环次数初始化为0
     while(iter < maxIter):
         alphaPairsChanged = 0  # 初始化为0，用来记录alpha是否已经进行优化
         for i in range(m):
-            fXi = float(np.multiply(alphas, labelMat).T *
-                        (dataMatrix * dataMatrix[i, :].T)) + b  # 第i个样本的预测类别
+            # w = sum(alpha_i * y_i * x_i)  i=1,2,...,m,  alpha_i是一个数值，y_i是一个数值，
+            # x_i是一个n维向量，w是一个n维向量
+            # fXi = w * x_i + b
+            # np.multiply()：数组和矩阵对应位置相乘，输出与相乘数组/矩阵的大小一致
+            # np.dot()：对于秩为1的数组，执行对应位置相乘，然后再相加；
+            # 对于秩不为1的二维数组，执行矩阵乘法运算；超过二维的可以参考numpy库介绍。
+            w = np.dot(np.multiply(alphas, labelMat).T, dataMatrix)  # n维向量
+            fXi = float(np.dot(w, dataMatrix[i, :].T)) + b
+            # fXi = float(np.multiply(alphas, labelMat).T *
+            #             (dataMatrix * dataMatrix[i, :].T)) + b  # 第i个样本的预测类别
             Ei = fXi - float(labelMat[i])  # 第i个样本预测误差
             #  如果
             if ((labelMat[i] * Ei < -toler) and (alphas[i] < C)) or \
@@ -87,14 +95,16 @@ def smoSimple(dataMatIn, classLabels, C, toler, maxIter):
                 alphaJold = alphas[j].copy()
 
                 # 将alpha[j]调整到0和C之间
+                # y_i != y_j 时,L与H的取值
                 if (labelMat[i] != labelMat[j]):
                     L = max(0, alphas[j] - alphas[i])
                     H = min(C, C + alphas[j] - alphas[i])
+                # y_i = y_j时,L与H的取值
                 else:
                     L = max(0, alphas[j] + alphas[i] - C)
                     H = min(0, alphas[j] + alphas[i])
 
-                # 如果L等于H，就不做任何改变，直接执行continue语句
+                # 如果L等于H，就不做任何改变，直接执行continue语句，跳出本次循环，进入下一次循环
                 if L == H:
                     print('L==H')
                     continue
@@ -107,16 +117,17 @@ def smoSimple(dataMatIn, classLabels, C, toler, maxIter):
                     print('eta>=0')
                     continue
                 # 计算新的alpha[j]
+                # 未经剪辑的alpha_j
                 alphas[j] -= labelMat[j] * (Ei - Ej) / eta
+                # 经过剪辑的alpha_j
                 alphas[j] = clipAlpha(alphas[j], H, L)
 
-                # 如果alpha[j]变化很小，就跳出循环
+                # 如果alpha[j]变化很小，就跳出本次循环，进入下一次循环
                 if (abs(alphas[j] - alphaJold) < 0.00001):
                     print('j not moving enough')
                     continue
                 # alpha[i]向相反方向改变同样的大小
-                alphas[i] += labelMat[j] * \
-                    labelMat[i] * (alphaJold - alphas[j])
+                alphas[i] += labelMat[j] * labelMat[i] * (alphaJold - alphas[j])
                 # alpha[i]对应的b值
                 b1 = b - Ei - \
                      labelMat[i] * (alphas[i] - alphaIold) * dataMatrix[i] * dataMatrix[i, :].T - \
@@ -228,6 +239,8 @@ def innerL(i, oS):
         j, Ej = selectJ(i, oS, Ei)
         alphaIold = oS.alphas[i].copy()
         alphaJold = oS.alphas[j].copy()
+
+        #  y_i = y_j,y_i != y_j 两种情况，L和H的取值范围
         if (oS.labelMat[i] != oS.labelMat[j]):
             L = max(0, oS.alphas[j] - oS.alphas[i])
             H = min(oS.C, oS.C + oS.alphas[j] - oS.alphas[i])
@@ -237,6 +250,8 @@ def innerL(i, oS):
         if L == H:
             print('L==H')
             return 0
+
+        #
         eta = 2.0 * oS.K[i, j] - oS.K[i, i] - oS.K[j, j]
         if eta >= 0:
             print('eta >= 0')
