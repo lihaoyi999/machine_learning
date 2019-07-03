@@ -110,14 +110,16 @@ def smoSimple(dataMatIn, classLabels, C, toler, maxIter):
                     continue
 
                 #  eta是alpha[j]的最优修改量
+                # eta = 2* <x_i, x_j> - <x_i, x_i> - <x_j, x_j> 尖括号表示两个向量的内积
                 eta = 2.0 * dataMatrix[i, :] * dataMatrix[j, :].T - \
                     dataMatrix[i, :] * dataMatrix[i, :].T - \
                     dataMatrix[j, :] * dataMatrix[j, :].T
+                # eta >=o 时退出本次循环，进入下一次循环
                 if eta >= 0:
                     print('eta>=0')
                     continue
                 # 计算新的alpha[j]
-                # 未经剪辑的alpha_j
+                # 未经剪辑的alpha_j = alpha_j - y_j(E_i - E_j)/eta
                 alphas[j] -= labelMat[j] * (Ei - Ej) / eta
                 # 经过剪辑的alpha_j
                 alphas[j] = clipAlpha(alphas[j], H, L)
@@ -127,6 +129,7 @@ def smoSimple(dataMatIn, classLabels, C, toler, maxIter):
                     print('j not moving enough')
                     continue
                 # alpha[i]向相反方向改变同样的大小
+                # alpha_i = alpha_i + y_i * y_j *(alpha_j^old - alpha_j^new)
                 alphas[i] += labelMat[j] * labelMat[i] * (alphaJold - alphas[j])
                 # alpha[i]对应的b值
                 b1 = b - Ei - \

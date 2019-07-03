@@ -60,7 +60,7 @@ $$w^*\cdot x+b=0$$
 
 $$f(x)=sign(w^*\cdot x+b^*)$$
 
-#### 定理7.2 
+## 定理7.2 
 
 设$\alpha^*=(\alpha_1^*,\alpha_2^*,\cdots,\alpha_N^*)$是对偶最优化问题：
 
@@ -76,7 +76,7 @@ $$w^*=\sum_{i=1}^{N}\alpha_i^* y_i x_i$$
 
 $$b^*=y_j-\sum_{i=1}^{N}\alpha_i^* y_i (x_i \cdot y_i)$$
 
-#### 算法7.2 
+## 算法7.2 
 
 **线性可分支持向量机学习算法**
 
@@ -109,4 +109,6 @@ $$w^*\cdot x+b^*=0$$，
 分类决策函数：
 
 $$f(x)=sign(w^*\cdot x+b^*)$$
+
+$C\geqslant \alpha \geqslant0$
 

@@ -128,12 +128,39 @@ TypeError: 'numpy.float64' object cannot be interpreted as an integer
 点A到分隔超平面的距离：$\frac{|W^TA+b|}{|W|}$  
 目标函数：
 $$\max \limits_{\mathbf{\alpha}}\left [ \sum_{i=1}^{m}\alpha_i - \frac{1}{2}\sum_{i,j=1}^{m}label^{(i)}\cdot label^{(j)}\cdot \alpha_i \cdot \alpha_j \left \langle x^{(i)},x^{(j)} \right \rangle\right ]$$
-目标函数的约束条件：
-$$C\geqslant \alpha \geqslant 0$$
-和
+目标函数的约束条件：  
+$$ C\geqslant \alpha \geqslant 0$$  
+和  
 $$ \sum_{i-1}^{m}\alpha_i \cdot label^{(i)}=0$$
 
 
 
-### 第7章 随机森林 
+### 第7章 利用AdaBoost元算法提高分类性能
+优点：范化错误率低，易编码，可以应用在大部分分类器上，无参数调整  
+缺点：对离群点敏感
+
+#### 7.1 基于数据集多重抽样的分类器
+##### 7.1.1 bagging:基于数据随机重抽样的分类器构建方法
+自举汇聚法（bootstrap aggregating），也称为bagging方法，是
+重原始数据集选择S次后得到的S个新数据集的一种技术。新数据集
+和原始数据集的大小相等，每个数据集都是通过在原始数据集中随机选择
+一个样本来进行替换而得到。允许新数据集中可以有重复值，而原始数据集
+的某些值在新集合中则不再出现。在S个数据集建好之后，将某个学习算法
+分别作用于每个数据集，就得到了S个分类器。对新数据进行分类时，
+就可以应用这S个分类器进行分类，选择分类器投票结果中最多的类别作为
+最后的分类结果。
+##### 7.1.2 boosting
+
+#### 7.2 训练算法：基于错误提升分类器的性能
+AdaBoost是adaptive boosting(自适应boosting)的缩写，其运行过程
+如下：训练数据中的每个样本，并赋予每个样本一个权重，这些权重构成向量D
+。一开始，这些权重都初始化为相等的值。首先在训练集中训练出一个弱
+分类器，并计算该分类器的错误率，然后在同一个数据集上再次训练弱分类器
+。在分类器的第二次训练中，将会调整每个样本的权重，其中第一次分类准确的
+样本权重降低，分类错误的样本权重提高。为了从所有弱分类器中得到最终
+的分类结果，AdaBoost为每个分类器都分配了一个权重值alpha，这些alpha值
+是基于每个弱分类器的错误率进行计算的。其中错误率$\epsilon$的定义为：
+$$\epsilon = \frac{为正确分类的样本数目}{所有样本数目}$$
+而alpha的计算公式为：
+$$\alpha = \frac{1}{2} \lin{(\frac{1-\epsilon}{\epsilon})} $$
 

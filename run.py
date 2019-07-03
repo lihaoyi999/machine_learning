@@ -4,7 +4,7 @@ import numpy as np
 # import bayes
 # import feedparser
 # import logRegres
-import svmMLiA
+# import svmMLiA
 
 
 # group, labels = kNN.createDataSet()
@@ -95,4 +95,4 @@ import svmMLiA
 #         print(dataArr[i], labelArr[i])
 
 # svmMLiA.testRbf()
-svmMLiA.testDigits(('rbf', 20))
+# svmMLiA.testDigits(('rbf', 20))
