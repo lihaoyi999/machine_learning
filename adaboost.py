@@ -33,6 +33,13 @@ def stumpClassify(dataMatrix, dimen, threshVal, threshIneq):
 
 
 def buildSrump(dataArr, classLabels, D):
+    """
+    建立一个单层决策树
+    :param dataArr: 数据集
+    :param classLabels: 类别标签
+    :param D: 每个样本点的权重值
+    :return:
+    """
     dataMatrix = np.mat(dataArr)
     labelMat = np.mat(classLabels).T
     m, n = np.shape(dataMatrix)
@@ -40,7 +47,7 @@ def buildSrump(dataArr, classLabels, D):
     bestSrump = {}
     bestclasEst = np.mat(np.zeros((m, 1)))
     minError = np.inf
-    for i in range(m):
+    for i in range(n):
         rangeMin = dataMatrix[:, i].min()
         rangeMax = dataMatrix[:, i].max()
         stepSize = (rangeMax - rangeMin)/numSteps
@@ -51,6 +58,7 @@ def buildSrump(dataArr, classLabels, D):
                 errArr = np.mat(np.ones((m, 1)))
                 errArr[predictedVals == labelMat] = 0
                 weightedError = D.T * errArr
+                # print('split: dim %d, thresh %.2f, thresh inequal: %s, the wieghted error is %.3f' % (i, threshVal, inequal, weightedError))
                 if weightedError < minError:
                     minError = weightedError
                     bestclasEst = predictedVals.copy()
@@ -60,10 +68,46 @@ def buildSrump(dataArr, classLabels, D):
     return bestSrump, minError, bestclasEst
 
 
+def adaBoostTrainDS(dataArr, classLabes, numIt=40):
+    """
+
+    :param dataArr: 数据集
+    :param classLabes: 类别标签
+    :param numIt: 迭代次数
+    :return: 返回具有最小错误率的单层决策树，同时返回有最小错误率和估计的类别向量
+    """
+    weakClassArr = []
+    m = np.shape(dataArr)[0]
+    D = np.mat(np.ones((m, 1)) / m)  # 样本的权值向量，均初始化为1/m
+    aggClassEst = np.mat(np.zeros((m, 1)))  # 记录每个样本点的类别估计累计值
+    for i in range(numIt):
+        bestStump, error, classEst = buildSrump(dataArr, classLabels, D)
+        print("D:", D.T)
+        alpha = float(0.5 * np.log((1.0 - error)/max(error, 1e-16)))
+        bestStump['alpha'] = alpha
+        weakClassArr.append(bestStump)
+        print('classEst: ', classEst.T)
+        expon = np.multiply(-1 * alpha * np.mat(classLabels).T, classEst)
+        D = np.multiply(D, np.exp(expon))
+        D = D / D.sum()
+        aggClassEst += alpha * classEst
+        print("aggClassEst:", aggClassEst.T)
+        aggErrors = np.multiply(np.sign(aggClassEst) != np.mat(classLabels).T, np.ones((m, 1)))
+        errorRate = aggErrors.sum() / m
+        print("total error: ", errorRate, "\n")
+        if errorRate == 0.0:
+            break
+    return weakClassArr
+
+
 if __name__ == '__main__':
     datMat, classLabels = leadSimpData()
     # print(datMat)
     # print(classLabels)
-    retArray = stumpClassify(datMat, 0, 1.5, 'lt')
-    print(datMat)
-    print(retArray)
+    # retArray = stumpClassify(datMat, 0, 1.5, 'lt')
+    # print(datMat)
+    # # print(retArray)
+    # D = np.mat(np.ones((5, 1))/5)
+    # buildSrump(datMat, classLabels, D)
+    classifierArray = adaBoostTrainDS(datMat, classLabels, 9)
+    print(classifierArray)
