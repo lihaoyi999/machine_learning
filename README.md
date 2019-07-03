@@ -160,7 +160,7 @@ AdaBoost是adaptive boosting(自适应boosting)的缩写，其运行过程
 样本权重降低，分类错误的样本权重提高。为了从所有弱分类器中得到最终
 的分类结果，AdaBoost为每个分类器都分配了一个权重值alpha，这些alpha值
 是基于每个弱分类器的错误率进行计算的。其中错误率$\epsilon$的定义为：
-$$\epsilon = \frac{为正确分类的样本数目}{所有样本数目}$$
+$$\varepsilon = \frac{为正确分类的样本数目}{所有样本数目}$$
 而alpha的计算公式为：
-$$\alpha = \frac{1}{2} \lin{(\frac{1-\epsilon}{\epsilon})} $$
+$$\alpha = \frac{1}{2} \ln{(\frac{1-\varepsilon}{\varepsilon})} $$
 
