@@ -16,9 +16,9 @@ def loadSimpData():
 def stumpClassify(dataMatrix, dimen, threshVal, threshIneq):
     """
     通过阈值对数据进行分类
-    :param dataMatrix:数据集
+    :param dataMatrix: 数据集
     :param dimen:维度
-    :param threshVal:阈值
+    :param threshVal: 阈值
     :param threshIneq: 比较操作符，小于：'lt' 或 大于：'gt'
     :return: 分类的类别
     """
