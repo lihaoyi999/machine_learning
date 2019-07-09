@@ -45,7 +45,8 @@ def binSplitDataSet(dataSet, feature, value):
 # 回归树的切分函数
 def regLeaf(dataSet):
     """
-    生成叶节点的模型，在回归树中，就是目标变量的均值
+    生成叶节点的模型，在回归树中，就是目标变量的均值，
+    计算的是因变量y的均值
     :param dataSet:
     :return:
     """
@@ -54,7 +55,8 @@ def regLeaf(dataSet):
 
 def regErr(dataSet):
     """
-    误差估计函数，在给定的数据上计算目标变量的平方误差
+    误差估计函数，在给定的数据上计算目标变量的平方误差，
+    计算因变量y的总方差
     :param dataSet:
     :return: 返回的是总方差，所以用均方差乘以数据集的样本数
     """
@@ -137,20 +139,6 @@ def createTree(dataSet, leafType=regLeaf, errType=regErr, ops=(1, 4)):
     return retTree
 
 
-if __name__ == '__main__':
-    # testMat = mat(eye(4))
-    # mat0, mat1 = binSplitDataSet(testMat, 2, 0.5)
-    # print('----------')
-    # print(testMat)
-    # print('----------')
-    # print(mat0)
-    # print('----------')
-    # print(mat1)
-    # print('----------')
-    myDat = loadDataSet('./machinelearninginaction/CH09/ex0.txt')
-    Tree = createTree(myDat)
-    print(Tree)
-
 # 后减枝函数prune()伪代码
 
 # 基于已有的树切分测试数据：
@@ -220,3 +208,156 @@ def prune(tree, testData):
             return tree
     else:
         return tree
+
+
+# 模型树
+# 模型树的叶节点生成函数
+def linearSolve(dataSet):
+    """
+    将数据集格式化成目标变量Y和自变量X，用于执行简单的线性回归
+    :param dataSet: 数据集，不包含常数项，但是已包含目标变量Y
+    :return: 返回回归系数，特征矩阵X（含常数项），目标变量
+    """
+    m, n = shape(dataSet)
+    X = mat(ones((m, n)))
+    Y = mat(ones((m, 1)))
+    X[:, 1:n] = dataSet[:, 0:n-1]
+    Y = dataSet[:, -1]
+    XTX = X.T * X
+    if linalg.det(XTX) == 0.0:
+        raise NameError('This matrix is singular, cannot do inverse,\n try increasing the second value of ops')
+    ws = XTX.I * (X.T * Y)
+    return ws, X, Y
+
+
+def modelLeaf(dataSet):
+    """
+    当数据不在需要切分的时候，生成叶节点的模型
+    :param dataSet:
+    :return: 返回值为回归系数
+    """
+    ws, X, Y = linearSolve(dataSet)
+    return ws
+
+
+def modelErr(dataSet):
+    """
+    在给定的数据集上计算误差
+    :param dataSet:
+    :return: 返回yHat和Y之间的平方误差
+    """
+    ws, X, Y = linearSolve(dataSet)
+    yHat = X * ws
+    return sum(power(Y - yHat, 2))
+
+
+# 用回归树进行预测
+def regTreeEval(model, inDat):
+    """
+    计算回归树的叶节点预测值
+    :param model: 叶节点对应的预测值
+    :param inDat: 待预测的单个样本点，包含常数项
+    :return: 返回样本点的预测值
+    """
+    # return float(model)
+    return model
+
+def modelTreeEval(model, inDat):
+    """
+    模型树的叶节点，计算样本点的预测值
+    :param model: 叶节点对应的回归模型系数
+    :param inDat: 待预测的单个样本点，包含常数项
+    :return: 返回预测值
+    """
+    n = shape(inDat)[1]
+    X = mat(ones((1, n+1)))
+    X[:, 1:n+1] = inDat
+    return float(X * model)
+
+
+def treeForeCast(tree, inData, modelEval=regTreeEval):
+    """
+    单个样本点的预测，是一个递归函数
+    :param tree: 回归树或模型树
+    :param inData: 待预测的一个样本点
+    :param modelEval: 回归树或模型树对应的计算预测值的函数
+    :return: 返回样本点的预测值
+    """
+    # 如果给定的模型是叶节点，直接返回叶节点的预测值
+    if not isTree(tree):
+        return modelEval(tree, inData)
+    # 如果待预测样本的属性值大于划分值，即满足左子树的分类条件，按左子树来进行处理
+    if inData[tree['spInd']] > tree['spVal']:
+        # 如果左子树是棵树，递归调用treeForeCast()函数，处理左子树
+        if isTree(tree['left']):
+            return treeForeCast(tree['left'], inData, modelEval)
+        # 否则，左子树是一个叶节点，直接返回预测值
+        else:
+            return modelEval(tree['left'], inData)
+    # 如果待预测样本的属性值小于等于划分值，即满足右子树的分类条件，按右子树来进行处理
+    else:
+        # 如果右子树是棵树，递归调用treeForeCast()函数，处理右子树
+        if isTree(tree['right']):
+            return treeForeCast(tree['right'], inData, modelEval)
+        # 否则，右子树是一个叶节点，直接返回预测值
+        else:
+            return modelEval(tree['right'], inData)
+
+
+def createForeCast(tree, testData, modelEval=regTreeEval):
+    """
+    对多个样本的预测
+    :param tree: 树模型，回归树或模型树
+    :param testData: 待预测的样本点，是一个矩阵，包含常数项x0=1
+    :param modelEval: 根据树模型指定相应的预测值计算函数
+    :return: 返回预测值
+    """
+    m = len(testData)  # 待预测的样本数
+    yHat = mat(zeros((m, 1)))  # 预测值
+    # 遍历每个样本点，计算预测值
+    for i in range(m):
+        tfc = treeForeCast(tree, mat(testData[i]), modelEval)
+        yHat[i, 0] = treeForeCast(tree, mat(testData[i]), modelEval)
+    return yHat
+
+
+if __name__ == '__main__':
+    """
+    """
+    # testMat = mat(eye(4))
+    # mat0, mat1 = binSplitDataSet(testMat, 2, 0.5)
+    # print('----------')
+    # print(testMat)
+    # print('----------')
+    # print(mat0)
+    # print('----------')
+    # print(mat1)
+    # print('----------')
+    # myDat = loadDataSet('./machinelearninginaction/CH09/ex0.txt')
+    # Tree = createTree(myDat)
+    # print(Tree)
+
+    # myDat2 = loadDataSet('./machinelearninginaction/CH09/ex2.txt')
+    # myTree = createTree(myDat2, ops=(0, 1))
+    # myDatTest = loadDataSet('./machinelearninginaction/CH09/ex2test.txt')
+    # prune_tree = prune(myTree, myDatTest)
+    # print(prune_tree)
+
+    # myDat2 = loadDataSet('./machinelearninginaction/CH09/exp2.txt')
+    # myTree = createTree(myDat2, modelLeaf, modelErr, ops=(1, 10))
+    # print(myTree)
+
+    # 创建一棵回归树
+    trainMat = loadDataSet('./machinelearninginaction/CH09/bikeSpeedVsIq_train.txt')
+    trainTest = loadDataSet('./machinelearninginaction/CH09/bikeSpeedVsIq_test.txt')
+    myTree = createTree(trainMat, leafType=regLeaf, errType=regErr, ops=(1, 20))
+    yHat = createForeCast(myTree, trainTest[:, 0])
+    print(corrcoef(yHat, trainTest[:, 1], rowvar=0)[0, 1])
+
+    # 创建一个模型树
+    myTree = createTree(trainMat, leafType=modelLeaf, errType=modelErr, ops=(1, 20))
+    yHat = createForeCast(myTree, trainTest[:, 0], modelTreeEval)
+    print(corrcoef(yHat, trainTest[:, 1], rowvar=0)[0, 1])
+    ws, X, Y = linearSolve(trainMat)
+    print(ws)
+
