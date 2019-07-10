@@ -101,6 +101,7 @@ def chooseBestFeatureToSplit(dataSet):
 
 def majorityCnt(classList):
     """
+    投票表决
     根据类别标签数据列表，统计标签值及对应的计数，返回计数值最大的分类标签
     :param classList: 标签数据列表
     :return: 返回计数值最大的分类标签
@@ -271,4 +272,4 @@ if __name__ == '__main__':
     dataSet, labels = createDataSet()
     # splitDataSet(dataSet, 0, 1)
     # chooseBestFeatureToSplit(dataSet)
-    majorityCnt([1,2,3,3,2,1,2,3,3,1,2,2])
+    majorityCnt([1, 2, 3, 3, 2, 1, 2, 3, 3, 1, 2, 2])

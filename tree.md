@@ -44,12 +44,12 @@ $$
 $$
 \left[
 \begin{matrix}
- & C_1      & C_2      & \cdots & C_K &  C   \\
-D_1 & N_1^{(1)}     & N_2^{(1)}      & \cdots & N_K^{(1)}  &  N^{(1)}   \\
-D_2 & N_1^{(2)}  & N_2^{(2)}  & \cdots & N_K^{(2)}  & N^{(2)}\\
-\vdots & \vdots      & \vdots      & \ddots & \vdots  &   \vdots  \\
-D_n &  N_1^{(n)}       & N_2^{(n)}       & \cdots & N_K^{(n)}   &   N^{(n)} \\
-D &   N_{1}      & N_{2}      & \cdots & N_{K}  &   N  \\
+ & C_1      & C_2      & \cdots & C_K &  C   \\\\
+D_1 & N_1^{(1)}     & N_2^{(1)}      & \cdots & N_K^{(1)}  &  N^{(1)}   \\\\
+D_2 & N_1^{(2)}  & N_2^{(2)}  & \cdots & N_K^{(2)}  & N^{(2)}\\\\
+\vdots & \vdots      & \vdots      & \ddots & \vdots  &   \vdots  \\\\
+D_n &  N_1^{(n)}       & N_2^{(n)}       & \cdots & N_K^{(n)}   &   N^{(n)} \\\\
+D &   N_{1}      & N_{2}      & \cdots & N_{K}  &   N  \\\\
 \end{matrix}
 \right]
 $$
