@@ -49,11 +49,11 @@ def createDataSet():
 
 def splitDataSet(dataSet, axis, value):
     """
-    按照给定的特征以及该特征的一个取值划分数据集
+    按照给定的特征以及该特征的一个取值得到的子数据集
     :param dataSet: 待划分的数据集，最后一列为类别标签
     :param axis: 划分数据集的特征的索引
     :param value: 该特征的取值
-    :return: 返回满足该特征取值、剔除该特征后的数据集
+    :return: 返回满足该特征取值、剔除该特征后的子数据集
     """
     retDataSet = []
     # 遍历每个样本点
@@ -126,7 +126,7 @@ def majorityCnt(classList):
 # @pysnooper.snoop()
 def createTree(dataSet, labels):
     """
-    生成树
+    生成树，是一个递归函数
     :param dataSet: 数据集，最后一列为类别取值
     :param labels: 类别标签列表，对应类别取值的实际意义
     :return:
@@ -134,20 +134,25 @@ def createTree(dataSet, labels):
     # 获取数据集中的最后一列，类别取值
     classList = [example[-1] for example in dataSet]
     # 如果数据集的类别都相同则停止继续划分，并返回当前类别取值
+    # 即为单结点树
     if classList.count(classList[0]) == len(classList):
         return classList[0]
+
     # 遍历完所有特征时，返回出现次数最多的类别
-    # 即划分的数据集只有类别一列时
+    # 即划分的数据集第0个样本只有类别一列时
     if len(dataSet[0]) == 1:
         return majorityCnt(classList)
+
     # 数据集的最佳划分特征索引
     bestFeat = chooseBestFeatureToSplit(dataSet)
     # 最佳划分特征的类别标签
     bestFeatLabel = labels[bestFeat]
-    myTree = {bestFeatLabel: {}}
-    del(labels[bestFeat])
+    myTree = {bestFeatLabel: {}}  # 字典，存储树
+    del(labels[bestFeat])  # 在类别标签中删除当前最佳特征的标签
+    # 从数据集中获取最佳特征的那一列
     featValues = [example[bestFeat] for example in dataSet]
-    uniqueVals = set(featValues)
+    uniqueVals = set(featValues)  # 取得不重复值
+    # 遍历对该特征的值，对相应的子数据集递归构造子树
     for value in uniqueVals:
         subLabels = labels[:]
         myTree[bestFeatLabel][value] = createTree(
@@ -211,6 +216,7 @@ def createPlot(inTree):
 
 
 def getNumLeafs(myTree):
+    # 计算叶结点数
     numLeafs = 0
     firstStr = list(myTree.keys())[0]
     secondDict = myTree[firstStr]
@@ -223,6 +229,7 @@ def getNumLeafs(myTree):
 
 
 def getTreeDepth(myTree):
+    # 计算树的深度
     maxDepth = 0
     firstStr = list(myTree.keys())[0]
     secondDict = myTree[firstStr]
@@ -272,4 +279,6 @@ if __name__ == '__main__':
     dataSet, labels = createDataSet()
     # splitDataSet(dataSet, 0, 1)
     # chooseBestFeatureToSplit(dataSet)
-    majorityCnt([1, 2, 3, 3, 2, 1, 2, 3, 3, 1, 2, 2])
+    # majorityCnt([1, 2, 3, 3, 2, 1, 2, 3, 3, 1, 2, 2])
+    myTree = createTree(dataSet, labels)
+    print(myTree)

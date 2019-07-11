@@ -107,7 +107,7 @@ def chooseBestSplit(dataSet, leafType=regLeaf, errType=regErr, ops=(1, 4)):
     # 如果误差减少量小于阈值tolS，则退出
     if (S - bestS) < tolS:
         return None, leafType(dataSet)
-    # 按最佳切分对数据及进行切分
+    # 按最佳切分对数集进行切分
     mat0, mat1 = binSplitDataSet(dataSet, bestIndex, bestValue)
     # 如果切分的数据集样本量很少，则退出
     if (shape(mat0)[0] < tolN) or (shape(mat1)[0] < tolN):
