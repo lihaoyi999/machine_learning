@@ -172,9 +172,9 @@ def getMean(tree):
 
 def prune(tree, testData):
     """
-
+    通过验证数据集对决策树进行剪枝
     :param tree: 待剪枝的数
-    :param testData: 剪枝所需的测试数据
+    :param testData: 剪枝所需的验证数据
     :return:
     """
     # 判断测试数据是否为空
@@ -214,6 +214,7 @@ def prune(tree, testData):
 # 模型树的叶节点生成函数
 def linearSolve(dataSet):
     """
+    简单线性回归模型
     将数据集格式化成目标变量Y和自变量X，用于执行简单的线性回归
     :param dataSet: 数据集，不包含常数项，但是已包含目标变量Y
     :return: 返回回归系数，特征矩阵X（含常数项），目标变量
