@@ -338,3 +338,36 @@ $$
 （7）采用交叉验证法在子树序列$T_0,T-1,\cdots,T_n$中选中最优子树$T_\alpha$。
 
 
+
+# 三、sklearn 决策树模型的实现
+
+## 1. sklearn.tree.DecisionTreeClassifier   分类决策树的实现
+
+*class* `sklearn.tree.DecisionTreeClassifier`(*criterion=’gini’*, *splitter=’best’*, *max_depth=None*, *min_samples_split=2*, *min_samples_leaf=1*, *min_weight_fraction_leaf=0.0*, *max_features=None*, *random_state=None*, *max_leaf_nodes=None*, *min_impurity_decrease=0.0*, *min_impurity_split=None*, *class_weight=None*, *presort=False*)
+
+参数说明：
+
+criterion=’gini’*,*  选择最佳划分的度量，默认是基尼指数，gini：基尼指数，entropy：信息增益
+
+splitter=’best’,  数据集划分的方式，best：最佳划分，random：随机划分
+
+*max_depth=None*,  设置树的最大深度，取值为None或者整数
+
+*min_samples_split=2*,  拆分内部节点所需的最小样本数
+
+*min_samples_leaf=1*,  叶结点所需的最小样本数
+
+*min_weight_fraction_leaf=0.0*,  叶结点的样本数占总样本数的比例
+
+ *max_features=None*,  寻找最佳分割时要考虑的最大特征数量
+
+ *random_state=None*,  随机种子
+
+ *max_leaf_nodes=None*, 最大叶结点数
+
+*min_impurity_decrease=0.0*, 决策树停止生长的阈值，如果节点的不纯度减少量高于阈值，节点将分裂，否则它是叶子
+
+*class_weight=None*,  类别权重
+
+*presort=False* 是否预先排序数据以加快拟合中最佳分割的查找
+
