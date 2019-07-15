@@ -5,7 +5,7 @@
 import pysnooper
 import numpy as np
 import operator
-import kNN
+from kNN import kNN
 
 
 @pysnooper.snoop()
