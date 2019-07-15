@@ -96,7 +96,7 @@ ID3算法的核心是在决策树各个结点上应用信息增益准则选择�
 
 （1）若$D$中所有样本点属于同一类$C_k$，则$T$为单结点树，并将$C_k$作为该结点的类标记，返回$T$；
 
-（2）若$A=\empty$，即特征集为空集时，则$T$为单结点树，并将D中样本点最多的类$C_k$作为该结点的类标记，返回$T$；
+（2）若$A=\emptyset$，即特征集为空集时，则$T$为单结点树，并将D中样本点最多的类$C_k$作为该结点的类标记，返回$T$；
 
 （3）否则，计算$A$中各特征对$D$的信息增益，选择信息增益最大的特征$A_g$；
 
@@ -124,7 +124,7 @@ ID3算法的核心是在决策树各个结点上应用信息增益准则选择�
 
 （1）若$D$中所有样本点属于同一类$C_k$，则$T$为单结点树，并将$C_k$作为该结点的类标记，返回$T$；
 
-（2）若$A=\empty $，即特征集为空集时，则$T$为单结点树，并将D中样本点最多的类$C_k$作为该结点的类标记，返回$T$；
+（2）若$A=\emptyset $，即特征集为空集时，则$T$为单结点树，并将D中样本点最多的类$C_k$作为该结点的类标记，返回$T$；
 
 （3）否则，计算$A$中各特征对$D$的信息增益比，选择信息增益比最大的特征$A_g$；
 
@@ -341,7 +341,7 @@ $$
 
 # 三、sklearn 决策树模型的实现
 
-## 1. sklearn.tree.DecisionTreeClassifier   分类决策树的实现
+## 1. 分类树的实现
 
 *class* `sklearn.tree.DecisionTreeClassifier`(*criterion=’gini’*, *splitter=’best’*, *max_depth=None*, *min_samples_split=2*, *min_samples_leaf=1*, *min_weight_fraction_leaf=0.0*, *max_features=None*, *random_state=None*, *max_leaf_nodes=None*, *min_impurity_decrease=0.0*, *min_impurity_split=None*, *class_weight=None*, *presort=False*)
 
@@ -349,25 +349,129 @@ $$
 
 criterion=’gini’*,*  选择最佳划分的度量，默认是基尼指数，gini：基尼指数，entropy：信息增益
 
-splitter=’best’,  数据集划分的方式，best：最佳划分，random：随机划分
+splitter=’best’,  数据集划分的方式，best：在特征的所有划分点中找出最优的划分点，random：随机的在部分划分点中找局部最优的划分点  
 
 *max_depth=None*,  设置树的最大深度，取值为None或者整数
 
-*min_samples_split=2*,  拆分内部节点所需的最小样本数
+*min_samples_split=2*,  拆分内部节点再划分所需的最小样本数，节点的样本数少于min_samples_split，则不会继续再尝试选择最优特征来进行划分  
 
 *min_samples_leaf=1*,  叶结点所需的最小样本数
 
 *min_weight_fraction_leaf=0.0*,  叶结点的样本数占总样本数的比例
 
- *max_features=None*,  寻找最佳分割时要考虑的最大特征数量
+*max_features=None*,  寻找最佳分割时要考虑的最大特征数量
 
- *random_state=None*,  随机种子
+*random_state=None*,  随机种子
 
- *max_leaf_nodes=None*, 最大叶结点数
+*max_leaf_nodes=None*, 最大叶结点数
 
-*min_impurity_decrease=0.0*, 决策树停止生长的阈值，如果节点的不纯度减少量高于阈值，节点将分裂，否则它是叶子
+*min_impurity_decrease=0.0*, 决策树停止生长的阈值，如果节点的不纯度减少量高于阈值，节点将分裂，否则它是叶子结点
 
 *class_weight=None*,  类别权重
 
 *presort=False* 是否预先排序数据以加快拟合中最佳分割的查找
+
+```python
+from sklearn.tree import export_graphviz
+from sklearn.tree import DecisionTreeClassifier
+import graphviz
+from sklearn.model_selection import train_test_split
+from sklearn.datasets import load_breast_cancer
+
+# 导入乳腺癌数据集
+cancer = load_breast_cancer()
+cancer = load_breast_cancer()
+# 查看数据的结构
+cancer.keys()
+# 查看特征名称 
+cancer.feature_names
+# 查看类别标签
+cancer.target_names  
+# 随机划分训练集、测试集，参数random_state是指随机生成器（随机种子），0表示函数输出是固定不变的。
+X_train, X_test, y_train, y_test = train_test_split(cancer['data'], 
+                                                    cancer['target'],
+                                                    random_state=42)
+# 构建分类决策树模型    
+tree = DecisionTreeClassifier(random_state=0)                          
+# 使用决策树模型拟合训练数据集 
+tree.fit(X_train, y_train)
+# 模型得分
+print('Train score:{:.3f}'.format(tree.score(X_train, y_train)))
+print('Test score:{:.3f}'.format(tree.score(X_test, y_test)))
+# 生成决策树可视化图
+dot_data = export_graphviz(tree, out_file=None, 
+                           class_names=['严重', '轻微'], 
+                           feature_names=cancer.feature_names,
+                           impurity=False,
+                           filled=True)
+graph = graphviz.Source(dot_data)
+graph.render("tree")
+# 返回每个样本的预测值的叶子索引
+tree.apply(X_test)
+# 特征的重要性
+tree.feature_importances_
+```
+
+## 2. 回归树的实现
+
+*class* `sklearn.tree.DecisionTreeRegressor`(*criterion=’mse’*, *splitter=’best’*, *max_depth=None*, *min_samples_split=2*, *min_samples_leaf=1*, *min_weight_fraction_leaf=0.0*, *max_features=None*, *random_state=None*, *max_leaf_nodes=None*, *min_impurity_decrease=0.0*, *min_impurity_split=None*, *presort=False*)
+
+参数说明：
+
+*criterion=’mse’*, 选择最佳划分的度量，默认是mse，mse：均方误差，mae：平均绝对误差
+
+*splitter=’best’*, 数据集划分的方式，best：在特征的所有划分点中找出最优的划分点，random：随机的在部分划分点中找局部最优的划分点
+
+*max_depth=None*, 设置树的最大深度，取值为None或者整数
+
+*min_samples_split=2*, 拆分内部节点再划分所需的最小样本数，节点的样本数少于min_samples_split，则不会继续再尝试选择最优特征来进行划分
+
+*min_samples_leaf=1*, 叶结点所需的最小样本数
+
+*min_weight_fraction_leaf=0.0*, 叶结点的样本数占总样本数的比例
+
+*max_features=None*, 寻找最佳分割时要考虑的最大特征数量
+
+*random_state=None*, 随机种子
+
+*max_leaf_nodes=None*, 最大叶结点数
+
+*min_impurity_decrease=0.0*, 决策树停止生长的阈值，如果节点的不纯度减少量高于阈值，节点将分裂，否则它是叶子结点
+
+*presort=False* 是否预先排序数据以加快拟合中最佳分割的查找
+
+```python
+import numpy as np
+from sklearn.tree import DecisionTreeRegressor
+import matplotlib.pyplot as plt
+# 创建数据集
+rng = np.random.RandomState(1)
+x = np.sort(5 * rng.rand(80, 1), axis=0)
+y = np.sin(x).ravel()
+y[::5] += 3 * (0.5 - rng.rand(16))
+# 训练模型
+regr_1 = DecisionTreeRegressor(max_depth=2)
+regr_1.fit(x, y)
+regr_2 = DecisionTreeRegressor(max_depth=5)
+regr_2.fit(x, y)
+# 模型评分
+print(regr_1.score(x, y))
+regr_2.score(x, y)
+# 使用模型进行预测
+x_test = np.arange(0.0, 5.0, 0.01)[:, np.newaxis]
+y_1 = regr_1.predict(x_test)
+y_2 = regr_2.predict(x_test)
+# 绘图
+plt.figure()
+plt.scatter(x, y, s=20, edgecolor="black", c="darkorange", label="data")
+plt.plot(x_test, y_1, color="cornflowerblue", 
+         label="max_depth=2", linewidth=2)
+plt.plot(x_test, y_2, color="yellowgreen", 
+         label="max_depth=5", linewidth=2)
+plt.xlabel("data")
+plt.ylabel("target")
+plt.title("Decision Tree Regression")
+plt.legend()
+plt.show()
+```
 
