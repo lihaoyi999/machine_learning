@@ -38,11 +38,11 @@ f(x)=w^T x+b=\sum_{i=1}^{N}\alpha_iy_ix_i^Tx+b
 $$
 KTT条件为：
 $$
-\left\{\begin{matrix}
+\left \{ \begin{matrix}
 \alpha_i \geq 0\\ 
 y_i f(x_i)-1 \geq 0\\ 
 \alpha_i(y_if(x_i)-1)=0
-\end{matrix}\right.
+\end{matrix}\right
 $$
 **优化的目标函数：**
 $$
