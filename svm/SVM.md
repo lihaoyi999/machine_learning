@@ -15,7 +15,7 @@ $$w^Tx+b=0$$
 假设超平面$(w,b)$能对样本进行正确的分类，那么对于$(x_i,y_i) \in T$，若$y_i=+1$，则有$w^T x_i+b>0$，相反地，若$y_i=-1$，则有$w^T x_i+b<0$。我们假设
 $$
 \begin{cases}
-w^T x_i+b \geqslant 0 ,& \text{ if } y_i=+1 \\ 
+w^T x_i+b \geq 0 ,& \text{ if } y_i=+1 \\ 
 w^T x_i+b \leqslant 0 ,& \text{ if } y_i=-1
 \end{cases}
 $$
@@ -39,8 +39,8 @@ $$
 KTT条件为：
 $$
 \left\{\begin{matrix}
-\alpha_i \geqslant 0\\ 
-y_i f(x_i)-1 \geqslant 0\\ 
+\alpha_i \geq 0\\ 
+y_i f(x_i)-1 \geq 0\\ 
 \alpha_i(y_if(x_i)-1)=0
 \end{matrix}\right.
 $$
@@ -48,9 +48,9 @@ $$
 $$
 \max_\limits{{\alpha}} \sum_{i=1}^{N}\alpha_i-\frac{1}{2} \sum_{i=1}^{N}\sum_{j=1}^{N}\alpha_i \alpha_j y_i y_j (x_i \cdot x_j)
 $$
-  
+
 $$
-s.t. \, \sum_{i=1}^{N}\alpha_i y_i=0,  \alpha_i \geqslant 0,i=1,2,\cdots,N
+s.t. \, \sum_{i=1}^{N}\alpha_i y_i=0,  \alpha_i \geq 0,i=1,2,\cdots,N
 $$
 
 
@@ -65,7 +65,7 @@ $$
 $$
 
 $$
-s.t.  \, y_i(w\cdot x_i+b)-1\geqslant 0,\,i=1,2,\cdots,N
+s.t.  \, y_i(w\cdot x_i+b)-1\geq 0,\,i=1,2,\cdots,N
 $$
 
 求得最优解$w^{*}\,,b^{*}$。
@@ -95,7 +95,7 @@ s.t.\,\sum_{i=1}^{N}\alpha_i y_i=0
 $$
 
 $$
-\alpha_i\geqslant 0,\,i=1,2,\cdots,N
+\alpha_i\geq 0,\,i=1,2,\cdots,N
 $$
 
 的解，则存在下标$j$，使得$\alpha_j>0$，并可按下式求得原始最优化问题
@@ -104,7 +104,7 @@ $$
 $$
 
 $$
-s.t. \, y_i(w \cdot x_i + b) -1 \geqslant 0, \, i = 1,2,\cdots,N
+s.t. \, y_i(w \cdot x_i + b) -1 \geq 0, \, i = 1,2,\cdots,N
 $$
 
 的解$w^*,b^*$：
@@ -132,7 +132,7 @@ $$
 $$
 \begin{eqnarray} 
 \min_{\alpha} && \frac{1}{2}\sum_{i=1}^{N}\sum_{j=1}^{N}\alpha_i \alpha_j y_i y_j(x_i \cdot x_j)-\sum_{i=1}^{N} \alpha_i\\
-s.t.\,\, && \sum_{i=1}^{N}\alpha_iy_i=0  \\ \alpha_i \geqslant 0 ,&& i =1,2\cdots,N
+s.t.\,\, && \sum_{i=1}^{N}\alpha_iy_i=0  \\ \alpha_i \geq 0 ,&& i =1,2\cdots,N
 \end{eqnarray}
 $$
 求得最优解$\alpha^*=(\alpha_1^*,\alpha_2^*,\cdots,\alpha_N^*)^T$。
@@ -157,7 +157,7 @@ $$
 $$
 f(x)=sign(w^*\cdot x+b^*)
 $$
-$C\geqslant \alpha \geqslant0$
+$C\geq \alpha \geq0$
 
 $$
 
