@@ -16,7 +16,7 @@ $$w^Tx+b=0$$
 $$
 \begin{cases}
 w^T x_i+b \geq 0 ,& \text{ if } y_i=+1 \\ 
-w^T x_i+b \leqslant 0 ,& \text{ if } y_i=-1
+w^T x_i+b \leq 0 ,& \text{ if } y_i=-1
 \end{cases}
 $$
 上面两公式的间隔可表示为$\frac{2}{\left| w \right|}$。
@@ -38,11 +38,11 @@ f(x)=w^T x+b=\sum_{i=1}^{N}\alpha_iy_ix_i^Tx+b
 $$
 KTT条件为：
 $$
-\left\{\begin{matrix}
+\left \{ \begin{matrix}
 \alpha_i \geq 0\\ 
 y_i f(x_i)-1 \geq 0\\ 
 \alpha_i(y_if(x_i)-1)=0
-\end{matrix}\right.
+\end{matrix}\right
 $$
 **优化的目标函数：**
 $$
