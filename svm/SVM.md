@@ -16,7 +16,7 @@ $$w^Tx+b=0$$
 $$
 \begin{cases}
 w^T x_i+b \geq 0 ,& \text{ if } y_i=+1 \\ 
-w^T x_i+b \leqslant 0 ,& \text{ if } y_i=-1
+w^T x_i+b \leq 0 ,& \text{ if } y_i=-1
 \end{cases}
 $$
 上面两公式的间隔可表示为$\frac{2}{\left| w \right|}$。
